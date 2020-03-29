@@ -3,12 +3,104 @@
     <head>
         <title>Launch Checklist</title>
         <link rel = "stylesheet" type = "text/css" href = "styles.css" />
-        <script src = "script.js"></script>
+        <script src = "script.js"></script>        
     </head>
-    <body>
+
+    <script>
+        window.addEventListener("load", function() {
+           let form = document.querySelector("form");
+           form.addEventListener("submit", function(event) {
+               let pilotNameInput   = document.querySelector("input[name=pilotName]")
+               let copilotNameInput = document.querySelector("input[name=copilotName]")
+               let fuelLevelInput   = document.querySelector("input[name=fuelLevel]")
+               let cargoMassInput   = document.querySelector("input[name=cargoMass]")
+
+               if(pilotNameInput.value === "" || copilotNameInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value === ""){
+                   alert("All fields are required!")
+                   event.preventDefault();
+               } 
+
+               if(pilotNameInput.value !== "Chris" || copilotNameInput.value !== "Blake") {
+                   alert("Make sure to enter valid information for each field!");
+                   event.preventDefault();
+               } 
+
+               if(isNaN(fuelLevelInput.value) || isNaN(cargoMassInput.value) ) {
+                   alert("Make sure to enter valid information for each field!")
+                   event.preventDefault()
+               }
+              
+               if (pilotNameInput.value !== "Chris") {
+                   document.querySelector("#faultyItems").style.visibility = 'visible'
+                   document.querySelector("#launchStatus").innerText = "Shuttle not ready for the launch."
+                   document.querySelector("#launchStatus").style.color = "red"
+                   document.querySelector("#pilotStatus").innerText = `Pilot should be Chris instead of ${pilotNameInput.value}.`
+                   event.preventDefault()
+               }
+
+               if (copilotNameInput.value !== "Blake") {
+                   document.querySelector("#faultyItems").style.visibility = 'visible'
+                   document.querySelector("#launchStatus").innerText = "Shuttle not ready for the launch."
+                   document.querySelector("#launchStatus").style.color = "red"
+                   document.querySelector("#copilotStatus").innerText = `Co-Pilot should be Blake instead of ${copilotNameInput.value}.`
+                   event.preventDefault()
+               }
+
+
+               if (fuelLevelInput.value < 10000) {
+                   document.querySelector("#faultyItems").style.visibility = 'visible'
+                   document.querySelector("#launchStatus").innerText = "Shuttle not ready for the launch."
+                   document.querySelector("#launchStatus").style.color = "red"
+                   document.querySelector("#fuelStatus").innerText = "Not enough fuel for the journey."
+                   event.preventDefault();
+               }
+
+               if (cargoMassInput.value > 10000) {
+                   document.querySelector("#faultyItems").style.visibility = 'visible'
+                   document.querySelector("#launchStatus").innerText = "Shuttle not ready for the launch."
+                   document.querySelector("#launchStatus").style.color = "red"
+                   document.querySelector("#cargoStatus").innerText = "Too much mass for the journey."
+                   event.preventDefault();
+               }
+
+               if (pilotNameInput.value == "Chris" && copilotNameInput.value == "Blake" && fuelLevelInput.value >= 10000 && cargoMassInput.value <= 10000) { 
+                   document.querySelector("#launchStatus").innerText = "Shuttle is ready for the launch."
+                   document.querySelector("#launchStatus").style.color = "green"
+                   event.preventDefault();
+               }
+                   
+           });
+
+           let json = []
+            fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
+               response.json().then( function(json) {
+                const div = document.getElementById("missionTarget");
+                  // Add HTML that includes the JSON data
+                  div.innerHTML = `
+                  <h2>Mission Destination</h2>
+                    <div>                        
+                      <ol>
+                         <li>Name: ${json[0].name}</li>
+                         <li>Diameter: ${json[0].diameter}</li>
+                         <li>Star: ${json[0].star}</li>
+                         <li>Distance from Earth: ${json[0].distance}</li>
+                         <li>Number of Moons: ${json[0].moons}</li>
+                      </ol>
+                    </div>
+                    
+                    <img src=${json[4].image}></img>
+                    `
+               });
+            });
+            
+         });
+      </script>
+
+
+     <body>
         <h1>Launch Checklist Form</h1>
-        <div id="missionTarget">
-            <!-- Fetch some planetary data -->
+        <div id="missionTarget">            
+             <!-- Fetch some planetary data -->
         </div> 
         <div id="launchForm">
             <form>

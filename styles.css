@@ -3,8 +3,9 @@ h1 {
 }
 
 div {
-    text-align: left;
+    text-align: center;
 }
+
 
 #faultyItems {
     visibility: hidden;   
@@ -41,6 +42,14 @@ div {
     border: 3px solid black;
     padding: 10px;
 }
+
+
+ol.missionTarget {
+    list-style-position: outside;
+    text-align: center;
+}
+
+
 
 button {
     background-color: #419f6a;
